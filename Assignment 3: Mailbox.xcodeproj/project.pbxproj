@@ -14,6 +14,7 @@
 		48A395241D03296500BC9FC4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 48A395221D03296500BC9FC4 /* LaunchScreen.storyboard */; };
 		48A3952F1D03296500BC9FC4 /* Assignment_3__MailboxTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A3952E1D03296500BC9FC4 /* Assignment_3__MailboxTests.swift */; };
 		48A3953A1D03296500BC9FC4 /* Assignment_3__MailboxUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A395391D03296500BC9FC4 /* Assignment_3__MailboxUITests.swift */; };
+		48A395481D03297B00BC9FC4 /* MailboxViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A395471D03297B00BC9FC4 /* MailboxViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +48,7 @@
 		48A395351D03296500BC9FC4 /* Assignment 3: MailboxUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Assignment 3: MailboxUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		48A395391D03296500BC9FC4 /* Assignment_3__MailboxUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Assignment_3__MailboxUITests.swift; sourceTree = "<group>"; };
 		48A3953B1D03296500BC9FC4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		48A395471D03297B00BC9FC4 /* MailboxViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MailboxViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,6 +102,7 @@
 				48A395191D03296500BC9FC4 /* AppDelegate.swift */,
 				48A3951B1D03296500BC9FC4 /* ViewController.swift */,
 				48A3951D1D03296500BC9FC4 /* Main.storyboard */,
+				48A395471D03297B00BC9FC4 /* MailboxViewController.swift */,
 				48A395201D03296500BC9FC4 /* Assets.xcassets */,
 				48A395221D03296500BC9FC4 /* LaunchScreen.storyboard */,
 				48A395251D03296500BC9FC4 /* Info.plist */,
@@ -258,6 +261,7 @@
 			files = (
 				48A3951C1D03296500BC9FC4 /* ViewController.swift in Sources */,
 				48A3951A1D03296500BC9FC4 /* AppDelegate.swift in Sources */,
+				48A395481D03297B00BC9FC4 /* MailboxViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
