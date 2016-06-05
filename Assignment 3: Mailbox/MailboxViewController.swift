@@ -16,6 +16,14 @@ class MailboxViewController: UIViewController {
     @IBOutlet weak var messageViewContainer: UIView!
     @IBOutlet weak var archiveView: UIImageView!
     @IBOutlet weak var laterView: UIImageView!
+    @IBOutlet weak var listView: UIImageView!
+    @IBOutlet weak var reschedueView: UIImageView!
+    @IBOutlet weak var listIconView: UIImageView!
+    @IBOutlet weak var DeleteView: UIImageView!
+    @IBOutlet weak var leftIconView: UIView!
+    @IBOutlet weak var rightIconView: UIView!
+    @IBOutlet weak var actionScreens: UIView!
+    @IBOutlet weak var segmentControl: UISegmentedControl!
     
     // Message Position Variables
     var messageOriginalCenter: CGPoint!
@@ -23,10 +31,15 @@ class MailboxViewController: UIViewController {
     var messageLeft: CGPoint!
     var messageOffset: CGFloat!
     
+    // Icon Position Variables
+    var leftIconViewriginalCenter: CGPoint!
+    var rightIconViewOriginalCenter: CGPoint!
+    
+    
     // Color Variables
     var backgroundRed = UIColor(red: 255/255.0, green: 0/255.0, blue: 0/255.0, alpha: 1.0)
     var backgroundGreen = UIColor(red: 25/255.0, green: 156/255.0, blue: 54/255.0, alpha: 1.0)
-    var backgroundGrey = UIColor(red: 170/255.0, green: 170/255.0, blue: 170/255.0, alpha: 1.0)
+    var backgroundGrey = UIColor(red: 219/255.0, green: 219/255.0, blue: 219/255.0, alpha: 1.0)
     var backgroundYellow = UIColor(red: 248/255.0, green: 203/255.0, blue: 39/255.0, alpha: 1.0)
     var backgroundBrown = UIColor(red: 206/255.0, green: 150/255.0, blue: 98/255.0, alpha: 1.0)
     
@@ -35,97 +48,206 @@ class MailboxViewController: UIViewController {
         
         scrollView.contentSize = feedImage.frame.size
         
-        archiveView.alpha = 0
-        laterView.alpha = 0
+        //Initial Alphas
+        archiveView.alpha = 1
+        laterView.alpha = 1
+        listView.alpha = 0
+        reschedueView.alpha = 0
+        listIconView.alpha = 0
+        DeleteView.alpha = 0
+        rightIconView.alpha = 0
+        leftIconView.alpha = 0
+        actionScreens.alpha = 0
         
-        messageOffset = 320
-        messageOriginalCenter = messageView.center
-        messageRight = CGPoint(x: messageView.center.x + messageOffset ,y: messageView.center.y)
-        messageLeft = CGPoint(x: messageView.center.x - messageOffset ,y: messageView.center.y)
+        segmentControl.selectedSegmentIndex = 1
     
+        
     }
     
     @IBAction func didPanMessage(sender: UIPanGestureRecognizer) {
         
         let translation = sender.translationInView(view)
         let velocity = sender.velocityInView(view)
-
         
         if sender.state == UIGestureRecognizerState.Began {
         
-//           messageOriginalCenter = messageView.center
+            //Moving Message Setup
+            messageOffset = 320
+            messageOriginalCenter = messageView.center
+            messageRight = CGPoint(x: messageView.center.x + messageOffset ,y: messageView.center.y)
+            messageLeft = CGPoint(x: messageView.center.x - messageOffset ,y: messageView.center.y)
             
+            //Moving Icon Setup
+            leftIconViewriginalCenter = leftIconView.center
+            rightIconViewOriginalCenter = rightIconView.center
             
         } else if sender.state == UIGestureRecognizerState.Changed {
             
             messageView.center = CGPoint(x: messageOriginalCenter.x + translation.x, y: messageOriginalCenter.y)
             
-            // Pan Right
-            if translation.x > 60 {
-               
-                UIView.animateWithDuration(0.2, animations: { 
-                    self.archiveView.alpha = 1
-                })
+            if messageView.center.x > messageOriginalCenter.x {
+                //Move Message Right
                 
-                if translation.x > 260 {
-                    messageViewContainer.backgroundColor = backgroundRed
-                } else {
+                //Alpha control for icon
+                let progress = convertValue(abs(translation.x), r1Min: 0, r1Max: 60, r2Min: 0, r2Max: 1)
+                leftIconView.alpha = progress
+                
+                //Back to grey
+                UIView.animateWithDuration(0.1, animations: {
+                    self.messageViewContainer.backgroundColor = self.backgroundGrey
+
+                })
+
+                
+                if abs(translation.x) >= 60 {
+                    
+                    //move icon
+                    leftIconView.center = CGPoint(x: leftIconViewriginalCenter.x + translation.x - 60, y: leftIconViewriginalCenter.y)
+                   
+                    //change to green
                     messageViewContainer.backgroundColor = backgroundGreen
-                }
-                
-            } else {
-//                messageViewContainer.backgroundColor = backgroundGrey
-                self.archiveView.alpha = 0
+                    
+                    //Switch Icon back to archive
+                    archiveView.alpha = 1
+                    DeleteView.alpha = 0
 
-            }
-            
-            // Pan left
-            if translation.x < -60 {
-                laterView.alpha = 1
+                    
+                    if abs(translation.x) >= 260 {
+                        
+                        //Switch Icon back to delete
+                        archiveView.alpha = 0
+                        DeleteView.alpha = 1
+                        
+                        // background color to red
+                        messageViewContainer.backgroundColor = backgroundRed
+                    }
+                }
+
                 
-                if translation.x < -260 {
-                    messageViewContainer.backgroundColor = backgroundBrown
                 } else {
-                    messageViewContainer.backgroundColor = backgroundYellow
+                    //Move Left
+                
+                    //Alpha control for icon
+                    let progress = convertValue(abs(translation.x), r1Min: 0, r1Max: 60, r2Min: 0, r2Max: 1)
+                    rightIconView.alpha = progress
+                
+                    //Back to grey
+                    UIView.animateWithDuration(0.1, animations: {
+                        self.messageViewContainer.backgroundColor = self.backgroundGrey
+                    
+                    })
+
+                
+                    if abs(translation.x) >= 60 {
+                        //move icon
+                        rightIconView.center = CGPoint(x: rightIconViewOriginalCenter.x + translation.x + 60, y: rightIconViewOriginalCenter.y)
+                        
+                        //Switch Icon back to clock
+                        laterView.alpha = 1
+                        listIconView.alpha = 0
+                        
+                        //change to yellow
+                        messageViewContainer.backgroundColor = backgroundYellow
+                        
+                        if abs(translation.x) >= 260 {
+                            
+                            //Switch Icon back to list
+                            laterView.alpha = 0
+                            listIconView.alpha = 1
+                            
+                            // background color to brown
+                            messageViewContainer.backgroundColor = backgroundBrown
+                        }
+                    }
                 }
-                
-            } else {
-                
+            
+            
+            } else if sender.state == UIGestureRecognizerState.Ended {
+                print("Gesture ended at")
+            
+                rightIconView.alpha = 0
+                leftIconView.alpha = 0
+            
+                rightIconView.center = rightIconViewOriginalCenter
+                leftIconView.center = leftIconViewriginalCenter
+            
+            
+                if messageView.center.x > messageOriginalCenter.x {
+                    if abs(translation.x) >= 60 {
+                        if abs(translation.x) >= 260 {
+                            UIView.animateWithDuration(0.2, animations: {
+                                self.messageView.center = self.messageRight
+                                self.feedImage.center.y = self.feedImage.center.y - 86
+                                self.messageViewContainer.backgroundColor = self.backgroundRed
+                                
+                            })
+                        
+                        } else {
+                            UIView.animateWithDuration(0.2, animations: {
+                                self.messageView.center = self.messageRight
+                                self.feedImage.center.y = self.feedImage.center.y - 86
+                                self.messageViewContainer.backgroundColor = self.backgroundGreen
+                                
+                            })
+                        }
+                        
+                       
+                    } else {
+                        
+                        UIView.animateWithDuration(0.2, animations: { 
+                            self.messageView.center = self.messageOriginalCenter
+
+                        })
+                    }
+                } else {
+                    if abs(translation.x) >= 60 {
+                        
+                        actionScreens.alpha = 1
+                        
+                        if abs(translation.x) >= 260 {
+                            UIView.animateWithDuration(0.2, animations: {
+                                self.messageView.center = self.messageLeft
+                                self.listView.alpha = 1
+                            })
+                        } else {
+                            UIView.animateWithDuration(0.2, animations: {
+                                self.messageView.center = self.messageLeft
+                                self.reschedueView.alpha = 1
+                            })
+                        }
+                        
+
+                    } else {
+                        UIView.animateWithDuration(0.2, animations: {
+                            self.messageView.center = self.messageOriginalCenter
+                            
+                        })
+
+                    }
             }
             
-        } else if sender.state == UIGestureRecognizerState.Ended {
-            print("Gesture ended")
-            
-            if translation.x > 60 {
-                print("greater than 60")
-
-                UIView.animateWithDuration(0.2, animations: {
-                    self.messageView.center = self.messageRight
-                })
-            } else {
-                UIView.animateWithDuration(0.2, animations: {
-                    self.messageView.center = self.messageOriginalCenter
-
-                })
-            }
-            
-            // Pan left
-            if translation.x < -60 {
                 
-                UIView.animateWithDuration(0.2, animations: {
-                    self.messageView.center = self.messageLeft
-                })
-
-               
-            } else {
-
                 
-            }
+                
+                
+        }
+        }
+    
+    @IBAction func didCloseActions(sender: AnyObject) {
+        
+        UIView.animateWithDuration(0.2, animations: {
+            self.messageView.center = self.messageOriginalCenter
+            self.listView.alpha = 0
+            self.reschedueView.alpha = 0
+            self.actionScreens.alpha = 0
+        })
+        
+    }
 
-            
-
-            }
-
+    @IBAction func didPanScreen(sender: UIScreenEdgePanGestureRecognizer) {
+        
+        print("edge pan")
+        
     }
     
     override func didReceiveMemoryWarning() {
