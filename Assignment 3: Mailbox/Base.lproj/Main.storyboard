@@ -86,6 +86,23 @@
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="65"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                     </imageView>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="YpJ-rT-Wyk">
+                                        <rect key="frame" x="2" y="0.0" width="63" height="47"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <connections>
+                                            <action selector="didCloseMenu:" destination="BYZ-38-t0r" eventType="touchUpInside" id="ZYa-YT-yHO"/>
+                                        </connections>
+                                    </button>
+                                    <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" id="0CV-ot-XuU">
+                                        <rect key="frame" x="73" y="19" width="175" height="29"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <segments>
+                                            <segment title="" image="later_nav_icon"/>
+                                            <segment title="" image="mail_nav_icon"/>
+                                            <segment title="" image="archive_nav_icon"/>
+                                        </segments>
+                                        <color key="tintColor" red="0.37254901960784315" green="0.72156862745098038" blue="0.84705882352941175" alpha="1" colorSpace="calibratedRGB"/>
+                                    </segmentedControl>
                                     <view contentMode="scaleToFill" id="ANP-ip-LlY" userLabel="Second Screens">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -107,21 +124,16 @@
                                             </button>
                                         </subviews>
                                     </view>
-                                    <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" id="0CV-ot-XuU">
-                                        <rect key="frame" x="73" y="19" width="175" height="29"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <segments>
-                                            <segment title="" image="later_nav_icon"/>
-                                            <segment title="" image="mail_nav_icon"/>
-                                            <segment title="" image="archive_nav_icon"/>
-                                        </segments>
-                                        <color key="tintColor" red="0.37254901960784315" green="0.72156862745098038" blue="0.84705882352941175" alpha="1" colorSpace="calibratedRGB"/>
-                                    </segmentedControl>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <gestureRecognizers/>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="3JL-8g-6Cu" appends="YES" id="u7T-8w-Gj1"/>
+                                </connections>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <gestureRecognizers/>
                     </view>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="320" height="1300"/>
@@ -134,6 +146,7 @@
                         <outlet property="leftIconView" destination="JsL-Xo-ieQ" id="9cw-Hq-xNg"/>
                         <outlet property="listIconView" destination="NCF-kM-hFD" id="2Bo-Gw-aU4"/>
                         <outlet property="listView" destination="cmP-gr-oob" id="XCn-Eq-alw"/>
+                        <outlet property="mainView" destination="tVG-BV-Klw" id="uv0-ar-Nxv"/>
                         <outlet property="messageView" destination="s3d-SC-voI" id="SUK-D5-vcx"/>
                         <outlet property="messageViewContainer" destination="did-OM-4j4" id="Vej-wb-KgA"/>
                         <outlet property="reschedueView" destination="ei9-Gx-ePf" id="bmg-YX-9f7"/>
@@ -143,18 +156,17 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
-                <screenEdgePanGestureRecognizer minimumNumberOfTouches="1" id="3JL-8g-6Cu">
-                    <rectEdge key="edges" left="YES"/>
-                    <connections>
-                        <action selector="didPanScreen:" destination="BYZ-38-t0r" id="tPj-F2-n25"/>
-                        <outlet property="delegate" destination="tVG-BV-Klw" id="z5U-hG-GYt"/>
-                    </connections>
-                </screenEdgePanGestureRecognizer>
                 <panGestureRecognizer minimumNumberOfTouches="1" id="oKl-nX-bom">
                     <connections>
                         <action selector="didPanMessage:" destination="BYZ-38-t0r" id="AJH-af-s8N"/>
                     </connections>
                 </panGestureRecognizer>
+                <screenEdgePanGestureRecognizer minimumNumberOfTouches="1" id="3JL-8g-6Cu">
+                    <rectEdge key="edges" left="YES"/>
+                    <connections>
+                        <action selector="didPanScreen:" destination="BYZ-38-t0r" id="tPj-F2-n25"/>
+                    </connections>
+                </screenEdgePanGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="162" y="622"/>
         </scene>

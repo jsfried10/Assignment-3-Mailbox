@@ -24,12 +24,20 @@ class MailboxViewController: UIViewController {
     @IBOutlet weak var rightIconView: UIView!
     @IBOutlet weak var actionScreens: UIView!
     @IBOutlet weak var segmentControl: UISegmentedControl!
+    @IBOutlet weak var mainView: UIView!
     
     // Message Position Variables
     var messageOriginalCenter: CGPoint!
     var messageRight: CGPoint!
     var messageLeft: CGPoint!
     var messageOffset: CGFloat!
+    
+    var mainViewOriginalCenter: CGPoint!
+    var mainViewOffset: CGFloat!
+    var mainViewRight: CGPoint!
+    
+    var feedImageOriginalCenter: CGPoint!
+    
     
     // Icon Position Variables
     var leftIconViewriginalCenter: CGPoint!
@@ -60,6 +68,11 @@ class MailboxViewController: UIViewController {
         actionScreens.alpha = 0
         
         segmentControl.selectedSegmentIndex = 1
+        
+        mainViewOriginalCenter = mainView.center
+        
+        feedImageOriginalCenter = feedImage.center
+        
     
         
     }
@@ -67,7 +80,7 @@ class MailboxViewController: UIViewController {
     @IBAction func didPanMessage(sender: UIPanGestureRecognizer) {
         
         let translation = sender.translationInView(view)
-        let velocity = sender.velocityInView(view)
+//        let velocity = sender.velocityInView(view)
         
         if sender.state == UIGestureRecognizerState.Began {
         
@@ -163,8 +176,8 @@ class MailboxViewController: UIViewController {
             
             
             } else if sender.state == UIGestureRecognizerState.Ended {
-                print("Gesture ended at")
             
+                //reset icon views
                 rightIconView.alpha = 0
                 leftIconView.alpha = 0
             
@@ -175,6 +188,7 @@ class MailboxViewController: UIViewController {
                 if messageView.center.x > messageOriginalCenter.x {
                     if abs(translation.x) >= 60 {
                         if abs(translation.x) >= 260 {
+                            //delete message and move feed up
                             UIView.animateWithDuration(0.2, animations: {
                                 self.messageView.center = self.messageRight
                                 self.feedImage.center.y = self.feedImage.center.y - 86
@@ -183,6 +197,7 @@ class MailboxViewController: UIViewController {
                             })
                         
                         } else {
+                            //archive message and move feed up
                             UIView.animateWithDuration(0.2, animations: {
                                 self.messageView.center = self.messageRight
                                 self.feedImage.center.y = self.feedImage.center.y - 86
@@ -193,7 +208,7 @@ class MailboxViewController: UIViewController {
                         
                        
                     } else {
-                        
+                        //move message back to center
                         UIView.animateWithDuration(0.2, animations: { 
                             self.messageView.center = self.messageOriginalCenter
 
@@ -201,15 +216,18 @@ class MailboxViewController: UIViewController {
                     }
                 } else {
                     if abs(translation.x) >= 60 {
-                        
+                       
+                        //make parent view visible
                         actionScreens.alpha = 1
                         
                         if abs(translation.x) >= 260 {
+                            //mmove message left and show list view
                             UIView.animateWithDuration(0.2, animations: {
                                 self.messageView.center = self.messageLeft
                                 self.listView.alpha = 1
                             })
                         } else {
+                            //mmove message left and show later view
                             UIView.animateWithDuration(0.2, animations: {
                                 self.messageView.center = self.messageLeft
                                 self.reschedueView.alpha = 1
@@ -218,6 +236,7 @@ class MailboxViewController: UIViewController {
                         
 
                     } else {
+                        //move messasge back to center
                         UIView.animateWithDuration(0.2, animations: {
                             self.messageView.center = self.messageOriginalCenter
                             
@@ -225,16 +244,13 @@ class MailboxViewController: UIViewController {
 
                     }
             }
-            
-                
-                
-                
-                
+        
         }
         }
     
     @IBAction func didCloseActions(sender: AnyObject) {
         
+        //Close menu for list/later
         UIView.animateWithDuration(0.2, animations: {
             self.messageView.center = self.messageOriginalCenter
             self.listView.alpha = 0
@@ -245,15 +261,66 @@ class MailboxViewController: UIViewController {
     }
 
     @IBAction func didPanScreen(sender: UIScreenEdgePanGestureRecognizer) {
+
+        //Pan to reveal menu from left edge
+        let velocity = sender.velocityInView(view)
+        let translation = sender.translationInView(view)
         
-        print("edge pan")
+        mainView.center = CGPoint(x: mainViewOriginalCenter.x + translation.x, y: mainViewOriginalCenter.y)
+
+        if sender.state == .Began {
+            print("edge pan start")
+        }
+        else if sender.state == .Changed {
+            print("edge pan change")
+        } else if sender.state == .Ended {
+            print("edge pan end")
+            if velocity.x > 0 {
+                UIView.animateWithDuration(0.2, animations: {
+                    self.mainView.center.x = 440
+                })
+            } else{
+                UIView.animateWithDuration(0.2, animations: {
+                    self.mainView.center = self.mainViewOriginalCenter
+                })
+            }
+
+        
+        }
         
     }
+    
+    @IBAction func didCloseMenu(sender: AnyObject) {
+        
+        //Close menu
+        UIView.animateWithDuration(0.2, animations: {
+            self.mainView.center = self.mainViewOriginalCenter
+        })
+        
+    }
+    
+    
+    override func motionEnded(motion: UIEventSubtype, withEvent event: UIEvent?) {
+       
+        //Reverse Deleteion via Shake
+        self.messageView.center = self.messageOriginalCenter
+
+        UIView.animateWithDuration(0.2, animations: {
+            self.feedImage.center = self.feedImageOriginalCenter
+            self.messageViewContainer.backgroundColor = self.backgroundGrey
+            
+        })
+
+    }
+    
+    
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    
     
 
     /*
